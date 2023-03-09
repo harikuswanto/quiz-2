@@ -21,54 +21,50 @@
                 service:'',
                 budget:''
             });
-            
             const [temp, setTemp] =React.useState({
-                name:'',
-                email:'',
-                phone:'',
-                company:'',
-                service:'',
-                budget:''
+                name:data.name,
+                email:data.email,
+                phone:data.phone,
+                company:data.company,
+                service:data.service,
+                budget:data.budget
             });
-
-            const emailCheck =(e)=>{
+            const [error, setError] =React.useState({});
+            
+            function emailCheck(e) {
                 const pattern = /[a-z0-9\.]{6,30}\@gmail\.com$/
                 return pattern.test(e);
             };
             
-            const phoneCheck =(e)=>{
+            function phoneCheck(e){
                 const pattern = /08[0-9]{6,10}$/ 
                 return pattern.test(e);
             };
             
-            const saveData=(c)=>{
-                isValidContact(c);
-                Object.assign(data, c);
-            }
-            
-            const nextButton=()=>{
-                saveData(temp);
-                page<4?setPage(page+1):'';
-            }
-
-
-            const prevButton=()=>{
-                saveData(temp);
-                page>0?setPage(page-1):'';
+            function isValidContact(e){
+                const te = {};
+                e.name==''?te.name='Name is required':te.name='';
+                e.email==''?te.email='Email is required':emailCheck(e.email)?te.email='':te.email = 'Email is invalid';
+                e.phone==''?te.phone='Phone Number is required':phoneCheck(e.phone)?te.phone='':te.phone = 'Phone Number is invalid';
+                e.company==''?te.company='Company is required':te.company='';
+                te.name||te.email||te.phone||te.company?te.status=true:te.status=false;
+                return te;
             }
 
-            const error={status:false};
-            const isValidContact=(e)=>{
-                e.name==''?error.name='Name is required':'';
-                e.email==''?error.email='Email is required':'';
-                e.phone==''?error.phone='Phone Number is required':'';
-                e.company==''?error.company='Company is required':'';
-                emailCheck(e.email)?'':error.email = 'Email is invalid';
-                emailCheck(e.phone)?'':error.phone = 'Phone Number is invalid';
-                error.name||error.email||error.phone||error.company?error.status=true:error.status=false;
+            function saveData(){
+                setError(isValidContact(temp));
+                if(error.status==false){Object.assign(data,temp)}
             }
-            
 
+            function nextButton(){
+                saveData();
+                page<4&&error.status==false?setPage(page+1):'';
+            }
+
+            function prevButton(){
+                saveData();
+                page>0&&error.status==false?setPage(page-1):'';
+            }
 
             function Header(){
                 return (
@@ -100,7 +96,6 @@
                     
                 }
             }
-
 
             function Navbar(x){
                 const p=x.page;
@@ -156,73 +151,28 @@
                     } 
             }
 
-            
-            // function TextInput(x){
-            //     return(
-            //         <div className="item">
-            //             <label for={x.name}>{x.placeholder}</label>
-            //             <input 
-            //                 type="text" 
-            //                 name={x.name} 
-            //                 placeholder={x.placeholder} 
-            //                 onChange={handleChange}
-            //                 />     
-            //             <div className="eror-msg">{x.eror}</div>     
-            //         </div>
-            //     )
-
-            // }
-
-
-            // function BoxContent(){
-            //     return(
-            //         <div className="box-content">
-            //             <TextInput 
-            //                 name="name"
-            //                 placeholder="Name"
-            //                 eror="Name is required"
-            //             />
-            //             <TextInput 
-            //                 name="email"
-            //                 placeholder="Email"
-            //                 eror="Email is required"
-            //             />
-            //             <TextInput 
-            //                 name="phone"
-            //                 placeholder="Phone Number"
-            //                 eror="Phone Number is invalid"
-            //             />
-            //             <TextInput 
-            //                 name="company"
-            //                 placeholder="Company"
-            //                 eror="Company is required"
-            //             />
-            //         </div>
-            //     )
-            // }
-            const BoxContent = (x) =>{
+            function BoxContent(x){
                 const [contact, setContact] =React.useState({
-                    name: data.name,
-                    email: data.email,
-                    phone: data.phone,
-                    company: data.company
+                    name: temp.name,
+                    email: temp.email,
+                    phone: temp.phone,
+                    company: temp.company
                 });                 
                 
-                const handleChange = (e) =>{
+                function handleChange(e){
                     const name = e.target.name;
                     const value = e.target.value;
                     setContact((prev) =>{
                         return {...prev, [name]: value}
                     })
-                    
                 }
-                const syncContact=()=>{
-                    Object.assign(temp, contact);
+
+                function syncContact(){
+                    Object.assign(temp,contact);
                 }
                 
-                const eventChange = (e) =>{
+                function eventChange(e){
                     handleChange(e);
-                    syncContact();
                 }
                 
 
@@ -230,22 +180,22 @@
                     <div className="box-content">
                         <div class="item">
                             <label for="name">Name</label>
-                            <input type="text" name="name" id="name"  placeholder="Name" value={contact.name} onChange={eventChange} />     
+                            <input type="text" name="name" id="name"  placeholder="Name" value={contact.name} onChange={eventChange} onBlur={syncContact}/>     
                             <div className="eror-msg">{error.name}</div>  
                         </div>
                         <div className="item">
                             <label for="email">Email</label>
-                            <input type="text" name="email" id="email" placeholder="Email" value={contact.email} onChange={eventChange} />     
+                            <input type="text" name="email" id="email" placeholder="Email" value={contact.email} onChange={eventChange} onBlur={syncContact} />     
                             <div className="eror-msg">{error.email}</div>     
                         </div>
                         <div className="item">
                             <label for="phone">Phone Number</label>
-                            <input type="text" name="phone" id="phone" placeholder="Phone Number" value={contact.phone} onChange={eventChange} />     
+                            <input type="text" name="phone" id="phone" placeholder="Phone Number" value={contact.phone} onChange={eventChange} onBlur={syncContact} />     
                             <div className="eror-msg">{error.phone}</div>     
                         </div>
                         <div className="item">
                             <label for="company">Company</label>
-                            <input type="text" name="company" id="company" placeholder="Company" value={contact.company} onChange={eventChange} />
+                            <input type="text" name="company" id="company" placeholder="Company" value={contact.company} onChange={eventChange} onBlur={syncContact} />
                             <div className="eror-msg">{error.company}</div>     
                         </div>
                     </div>
@@ -253,7 +203,6 @@
             }
 
 
-            
             function Box(x){
                 return(
                     <div className="box">
@@ -272,7 +221,6 @@
                     </div>
                 )
             }
-
             return (
                 < >
                     <Header />
