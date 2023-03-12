@@ -12,13 +12,13 @@
     <script type="text/babel">
         const root = document.querySelector('#root');
         function App(){
-            const [page, setPage] = React.useState(1);
+            const [page, setPage] = React.useState(2);
             const [data, setData] =React.useState({
                 name:'',
                 email:'',
                 phone:'',
                 company:'',
-                service:'',
+                service:'Web Design',
                 budget:''
             });
             const [temp, setTemp] =React.useState({
@@ -55,6 +55,17 @@
                 setError(isValidContact(temp));
                 if(error.status==false){Object.assign(data,temp)}
             }
+
+
+            // function nextButton(){
+            //     setError(isValidContact(temp));
+            //     // saveData();
+            //     if(error.status==false){
+            //         Object.assign(data,temp);
+            //         if(page<4){
+            //             setPage(page+1)
+            //         }
+            //     }
 
             function nextButton(){
                 saveData();
@@ -151,7 +162,41 @@
                     } 
             }
 
-            function BoxContent(x){
+            function PageLayanan(x){
+                console.log('Temp ', temp)
+                console.log('Data ',data)
+                const [service,setService]=React.useState({service:temp.service});
+                function radioChange(e){
+                    setService({service:e.target.id});
+                    Object.assign(temp, {service:e.target.id})
+                }
+                return(
+                    <div className="box-content">
+                        <input type="radio" name="service" id="Development" onClick={radioChange} checked={service.service=="Development"?true:false}/>
+                        <label for="Development" className="layanan">
+                            <div className="icon-layanan" style={{backgroundImage:`url('img/Development.png')`}}></div>
+                            <div className="nama-layanan">Development</div>
+                        </label>
+                        <input type="radio" name="service" id="Web Design" onClick={radioChange} checked={service.service=="Web Design"?true:false} />
+                        <label for="Web Design" className="layanan">
+                            <div className="icon-layanan" style={{backgroundImage:`url('img/WebDesign.png')`}}></div>
+                            <div className="nama-layanan">Web Design</div>
+                        </label>
+                        <input type="radio" name="service" id="Marketing" onClick={radioChange} checked={service.service=="Marketing"?true:false} />
+                        <label for="Marketing" className="layanan">
+                            <div className="icon-layanan" style={{backgroundImage:`url('img/Marketing.png')`}}></div>
+                            <div className="nama-layanan">Marketing</div>
+                        </label>
+                        <input type="radio" name="service" id="Other" onClick={radioChange} checked={service.service=="Other"?true:false} />
+                        <label for="Other" className="layanan">
+                            <div className="icon-layanan" style={{backgroundImage:`url('img/Other.png')`}}></div>
+                            <div className="nama-layanan">Other</div>
+                        </label>
+                    </div>
+                )
+            }
+
+            function PageContacts(x){
                 const [contact, setContact] =React.useState({
                     name: temp.name,
                     email: temp.email,
@@ -175,25 +220,24 @@
                     handleChange(e);
                 }
                 
-
                 return(
                     <div className="box-content">
-                        <div class="item">
-                            <label for="name">Name</label>
+                        <div className={error.name?'item error':'item'}>
+                            <label for="name" >Name</label>
                             <input type="text" name="name" id="name"  placeholder="Name" value={contact.name} onChange={eventChange} onBlur={syncContact}/>     
                             <div className="eror-msg">{error.name}</div>  
                         </div>
-                        <div className="item">
+                        <div className={error.email?'item error':'item'}>
                             <label for="email">Email</label>
                             <input type="text" name="email" id="email" placeholder="Email" value={contact.email} onChange={eventChange} onBlur={syncContact} />     
                             <div className="eror-msg">{error.email}</div>     
                         </div>
-                        <div className="item">
+                        <div className={error.phone?'item error':'item'}>
                             <label for="phone">Phone Number</label>
                             <input type="text" name="phone" id="phone" placeholder="Phone Number" value={contact.phone} onChange={eventChange} onBlur={syncContact} />     
                             <div className="eror-msg">{error.phone}</div>     
                         </div>
-                        <div className="item">
+                        <div className={error.company?'item error':'item'}>
                             <label for="company">Company</label>
                             <input type="text" name="company" id="company" placeholder="Company" value={contact.company} onChange={eventChange} onBlur={syncContact} />
                             <div className="eror-msg">{error.company}</div>     
@@ -202,13 +246,18 @@
                 )
             }
 
+            function BoxContent(x){
+                if(x.page==1){return( <PageContacts />)}
+                else if(x.page==2){return( <PageLayanan />)}
+                
+            }
 
             function Box(x){
                 return(
                     <div className="box">
                         <Navbar page={x.page} />
                         <BoxTitle page={x.page} />
-                        <BoxContent />
+                        <BoxContent page={x.page} />
                     </div>
                 )
             }

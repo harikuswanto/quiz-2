@@ -156,12 +156,17 @@ label{
     margin-bottom: 15px;
 }
 
+.error,.error label{
+    color: #962DFF;
+}
+
+.error input[type=text]{
+    border: 2px solid #962DFF;
+}
+
 .eror-msg{
     margin: 10px 0 0 0;
-    font-weight: 400;
-    font-size: 18px;
     line-height: 20px;
-    color: #962DFF;
     text-align: right;
 }
 
@@ -215,6 +220,7 @@ label{
     border: 1px solid #EFF0F7;
     box-shadow: 0px 2px 6px rgba(19, 18, 66, 0.07);
     border-radius: 16px;
+    cursor: pointer;
 }
 
 .icon-layanan{
@@ -261,4 +267,14 @@ label{
 
 .closing h2,.closing p{
     margin: 5px;
+}
+
+input[type="radio"]{
+    display: none;
+}
+
+input[type="radio"]:checked+label{
+    background: #FFFFFF;
+    border: 2px solid #4A3AFF;
+    box-shadow: 0px 2px 11px rgba(69, 65, 164, 0.06), 0px 4px 10px rgba(31, 37, 89, 0.07);
 }
