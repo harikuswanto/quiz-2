@@ -12,7 +12,7 @@
     <script type="text/babel">
         const root = document.querySelector('#root');
         function App(){
-            const [page, setPage] = React.useState(2);
+            const [page, setPage] = React.useState(1);
             const [data, setData] =React.useState({
                 name:'',
                 email:'',
@@ -56,25 +56,14 @@
                 if(error.status==false){Object.assign(data,temp)}
             }
 
-
-            // function nextButton(){
-            //     setError(isValidContact(temp));
-            //     // saveData();
-            //     if(error.status==false){
-            //         Object.assign(data,temp);
-            //         if(page<4){
-            //             setPage(page+1)
-            //         }
-            //     }
-
             function nextButton(){
                 saveData();
-                page<4&&error.status==false?setPage(page+1):'';
+                page>1||error.status==false?setPage(page+1):'';
             }
 
             function prevButton(){
                 saveData();
-                page>0&&error.status==false?setPage(page-1):'';
+                page>1||error.status==false?setPage(page-1):'';
             }
 
             function Header(){
@@ -163,31 +152,31 @@
             }
 
             function PageLayanan(x){
-                console.log('Temp ', temp)
-                console.log('Data ',data)
-                const [service,setService]=React.useState({service:temp.service});
+                console.log('Temp',temp);
+                console.log('Data',data);
                 function radioChange(e){
-                    setService({service:e.target.id});
-                    Object.assign(temp, {service:e.target.id})
+                    setTemp((prev) =>{
+                        return {...prev, service: e.target.id}
+                    })
                 }
                 return(
                     <div className="box-content">
-                        <input type="radio" name="service" id="Development" onClick={radioChange} checked={service.service=="Development"?true:false}/>
+                        <input type="radio" name="service" id="Development" onClick={radioChange} checked={temp.service=="Development"?true:false}/>
                         <label for="Development" className="layanan">
                             <div className="icon-layanan" style={{backgroundImage:`url('img/Development.png')`}}></div>
                             <div className="nama-layanan">Development</div>
                         </label>
-                        <input type="radio" name="service" id="Web Design" onClick={radioChange} checked={service.service=="Web Design"?true:false} />
+                        <input type="radio" name="service" id="Web Design" onClick={radioChange} checked={temp.service=="Web Design"?true:false} />
                         <label for="Web Design" className="layanan">
                             <div className="icon-layanan" style={{backgroundImage:`url('img/WebDesign.png')`}}></div>
                             <div className="nama-layanan">Web Design</div>
                         </label>
-                        <input type="radio" name="service" id="Marketing" onClick={radioChange} checked={service.service=="Marketing"?true:false} />
+                        <input type="radio" name="service" id="Marketing" onClick={radioChange} checked={temp.service=="Marketing"?true:false} />
                         <label for="Marketing" className="layanan">
                             <div className="icon-layanan" style={{backgroundImage:`url('img/Marketing.png')`}}></div>
                             <div className="nama-layanan">Marketing</div>
                         </label>
-                        <input type="radio" name="service" id="Other" onClick={radioChange} checked={service.service=="Other"?true:false} />
+                        <input type="radio" name="service" id="Other" onClick={radioChange} checked={temp.service=="Other"?true:false} />
                         <label for="Other" className="layanan">
                             <div className="icon-layanan" style={{backgroundImage:`url('img/Other.png')`}}></div>
                             <div className="nama-layanan">Other</div>
