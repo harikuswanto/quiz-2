@@ -129,6 +129,10 @@ input[type=text]{
     background-position-y: center;
 }
 
+input[type=text]:focus{
+    outline: none;
+}
+
 input[name=name]{
     background-image: url("img/name.png");
 }

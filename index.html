@@ -29,8 +29,28 @@
                 service:data.service,
                 budget:data.budget
             });
-            const [error, setError] =React.useState({});
+            const [error, setError] =React.useState({
+                name:"",
+                email:"",
+                phone:"",
+                company:"",
+            });
             
+            const nameRef = React.useRef(null);
+            const emailRef = React.useRef(null);
+            const phoneRef = React.useRef(null);
+            const companyRef = React.useRef(null);
+            
+            React.useEffect(() => {
+                if(error.name.length>0){nameRef.current.focus()} else
+                if(error.email.length>0){emailRef.current.focus()} else
+                if(error.phone.length>0){phoneRef.current.focus()} else
+                if(error.company.length>0){companyRef.current.focus()}
+            }, [error]);
+
+
+
+
             function emailCheck(e) {
                 const pattern = /[a-z0-9\.]{6,30}\@gmail\.com$/
                 return pattern.test(e);
@@ -234,22 +254,49 @@
                 }
                 return(
                     <div className="box-content">
-                        <input type="radio" name="service" id="Development" value="Development" onClick={radioChange} checked={temp.service=="Development"?true:false}/>
+                        <input type="radio" 
+                            name="service" 
+                            id="Development" 
+                            value="Development" 
+                            onClick={radioChange} 
+                            checked={temp.service=="Development"?true:false}
+                        />
                         <label for="Development" className="layanan">
                             <div className="icon-layanan" style={{backgroundImage:`url('img/Development.png')`}}></div>
                             <div className="nama-layanan">Development</div>
                         </label>
-                        <input type="radio" name="service" id="Web Design" value="Web Design" onClick={radioChange} checked={temp.service=="Web Design"?true:false} />
+                        <input 
+                            type="radio" 
+                            name="service" 
+                            id="Web Design" 
+                            value="Web Design" 
+                            onClick={radioChange} 
+                            checked={temp.service=="Web Design"?true:false} 
+                        />
                         <label for="Web Design" className="layanan">
                             <div className="icon-layanan" style={{backgroundImage:`url('img/WebDesign.png')`}}></div>
                             <div className="nama-layanan">Web Design</div>
                         </label>
-                        <input type="radio" name="service" id="Marketing" value="Marketing" onClick={radioChange} checked={temp.service=="Marketing"?true:false} />
+                        <input 
+                            type="radio" 
+                            name="service" 
+                            id="Marketing" 
+                            value="Marketing" 
+                            onClick={radioChange} 
+                            checked={temp.service=="Marketing"?true:false} 
+                        />
                         <label for="Marketing" className="layanan">
                             <div className="icon-layanan" style={{backgroundImage:`url('img/Marketing.png')`}}></div>
                             <div className="nama-layanan">Marketing</div>
                         </label>
-                        <input type="radio" name="service" id="Other" value="Other" onClick={radioChange} checked={temp.service=="Other"?true:false} />
+                        <input 
+                            type="radio" 
+                            name="service" 
+                            id="Other" 
+                            value="Other" 
+                            onClick={radioChange} 
+                            checked={temp.service=="Other"?true:false} 
+                        />
                         <label for="Other" className="layanan">
                             <div className="icon-layanan" style={{backgroundImage:`url('img/Other.png')`}}></div>
                             <div className="nama-layanan">Other</div>
@@ -286,22 +333,58 @@
                     <div className="box-content">
                         <div className={error.name?'item error':'item'}>
                             <label for="name" >Name</label>
-                            <input type="text" name="name" id="name"  placeholder="Name" value={contact.name} onChange={eventChange} onBlur={syncContact}/>     
+                            <input 
+                                type="text" 
+                                name="name" 
+                                id="name"  
+                                placeholder="Name" 
+                                value={contact.name}
+                                ref={nameRef}
+                                onChange={eventChange} 
+                                onBlur={syncContact}
+                            />     
                             <div className="eror-msg">{error.name}</div>  
                         </div>
                         <div className={error.email?'item error':'item'}>
                             <label for="email">Email</label>
-                            <input type="text" name="email" id="email" placeholder="Email" value={contact.email} onChange={eventChange} onBlur={syncContact} />     
+                            <input 
+                                type="text" 
+                                name="email" 
+                                id="email" 
+                                placeholder="Email" 
+                                value={contact.email} 
+                                ref={emailRef}
+                                onChange={eventChange} 
+                                onBlur={syncContact} 
+                            />     
                             <div className="eror-msg">{error.email}</div>     
                         </div>
                         <div className={error.phone?'item error':'item'}>
                             <label for="phone">Phone Number</label>
-                            <input type="text" name="phone" id="phone" placeholder="Phone Number" value={contact.phone} onChange={eventChange} onBlur={syncContact} />     
+                            <input 
+                                type="text" 
+                                name="phone" 
+                                id="phone" 
+                                placeholder="Phone Number" 
+                                value={contact.phone} 
+                                ref={phoneRef}
+                                onChange={eventChange} 
+                                onBlur={syncContact} 
+                            />     
                             <div className="eror-msg">{error.phone}</div>     
                         </div>
                         <div className={error.company?'item error':'item'}>
                             <label for="company">Company</label>
-                            <input type="text" name="company" id="company" placeholder="Company" value={contact.company} onChange={eventChange} onBlur={syncContact} />
+                            <input 
+                                type="text" 
+                                name="company" 
+                                id="company" 
+                                placeholder="Company" 
+                                value={contact.company} 
+                                ref={companyRef}
+                                onChange={eventChange} 
+                                onBlur={syncContact} 
+                            />
                             <div className="eror-msg">{error.company}</div>     
                         </div>
                     </div>
