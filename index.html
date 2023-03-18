@@ -313,20 +313,24 @@
                     company: temp.company
                 });                 
                 
-                function handleChange(e){
-                    const name = e.target.name;
-                    const value = e.target.value;
-                    setContact((prev) =>{
-                        return {...prev, [name]: value}
-                    })
-                }
+                // function handleChange(e){
+                //     const name = e.target.name;
+                //     const value = e.target.value;
+                //     setContact((prev) =>{
+                //         return {...prev, [name]: value}
+                //     })
+                // }
 
-                function syncContact(){
-                    Object.assign(temp,contact);
-                }
+                // function syncContact(){
+                //     Object.assign(temp,contact);
+                // }
                 
                 function eventChange(e){
-                    handleChange(e);
+                    const name = e.target.name;
+                    const value = e.target.value;
+                    setTemp((prev) =>{
+                        return {...prev, [name]: value}
+                    })
                 }
                 
                 return(
@@ -341,7 +345,7 @@
                                 value={contact.name}
                                 ref={nameRef}
                                 onChange={eventChange} 
-                                onBlur={syncContact}
+                                // onBlur={syncContact}
                             />     
                             <div className="eror-msg">{error.name}</div>  
                         </div>
@@ -355,7 +359,7 @@
                                 value={contact.email} 
                                 ref={emailRef}
                                 onChange={eventChange} 
-                                onBlur={syncContact} 
+                                // onBlur={syncContact} 
                             />     
                             <div className="eror-msg">{error.email}</div>     
                         </div>
@@ -369,7 +373,7 @@
                                 value={contact.phone} 
                                 ref={phoneRef}
                                 onChange={eventChange} 
-                                onBlur={syncContact} 
+                                // onBlur={syncContact} 
                             />     
                             <div className="eror-msg">{error.phone}</div>     
                         </div>
@@ -383,7 +387,7 @@
                                 value={contact.company} 
                                 ref={companyRef}
                                 onChange={eventChange} 
-                                onBlur={syncContact} 
+                                // onBlur={syncContact} 
                             />
                             <div className="eror-msg">{error.company}</div>     
                         </div>
