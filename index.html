@@ -63,11 +63,11 @@
             
             function isValidContact(e){
                 const te = {};
-                if(e.name==''){te.name='Name is required'} else {te.name=''};
-                if(e.email==''){te.email='Email is required'} else if(emailCheck(e.email)){te.email=''} else {te.email = 'Email is invalid'};
-                if(e.phone==''){te.phone='Phone Number is required'} else if(phoneCheck(e.phone)){te.phone=''} else {te.phone = 'Phone Number is invalid'};
-                if(e.company==''){te.company='Company is required'} else {te.company=''};
-                if(te.name||te.email||te.phone||te.company){te.status=true} else {te.status=false};
+                e.name==''?te.name='Name is required':te.name='';
+                e.email==''?te.email='Email is required':emailCheck(e.email)?te.email='':te.email = 'Email is invalid';
+                e.phone==''?te.phone='Phone Number is required':phoneCheck(e.phone)?te.phone='':te.phone = 'Phone Number is invalid';
+                e.company==''?te.company='Company is required':te.company='';
+                te.name||te.email||te.phone||te.company?te.status=true:te.status=false;
                 return te;
             }
 
@@ -78,12 +78,12 @@
 
             function nextButton(){
                 saveData();
-                if(page>1||isValidContact(temp).status==false){setPage(page+1)};
+                page>1||isValidContact(temp).status==false?setPage(page+1):'';
             }
 
             function prevButton(){
                 saveData();
-                if(page>1||isValidContact(temp).status==false){setPage(page-1)};
+                page>1||isValidContact(temp).status==false?setPage(page-1):'';
             }
 
             function Header(){
