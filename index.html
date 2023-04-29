@@ -5,12 +5,270 @@
     <title>Request Project Quote</title>
 </head>
 <body>
-    <div id="root" class="container"></div>
+    <div id="root" class="container">
+        
+    </div>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js" ></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" ></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" ></script>
     <script type="text/babel">
         const root = document.querySelector('#root');
+
+        function StepBox(e){
+            function bar(step,page){
+                return(
+                    <div className={step<page?"bar done":"bar"}>
+                        <div className={step===page?"half":""}></div>
+                    </div>
+                )
+            }
+            const step = [1,2,3];
+            let stepBox=step.map(step=>
+                <>
+                {bar(step, e.page)}
+                <div className={step<e.page?"step done":"step"}>{step+1}</div>
+                </>
+            )
+            return(
+                <nav>
+                <div className="step done">1</div>
+                {stepBox}
+                </nav>
+            )
+        }
+
+        function ContentBox(e){
+            if(e.page===1){return <ContactBox {...e} />} else
+            if(e.page===2){return <ServiceBox {...e} />} else
+            if(e.page===3){return <BudgetBox {...e} />} else
+            if(e.page===4){return <SubmitBox {...e} />}
+        }
+
+        function TextInput({
+            data,setData,
+            id,label,
+            target,error,reff
+        }){
+            function onTextChange(e){
+                setData((prev) =>{
+                        return {...prev, [id]: e.target.value}
+                    })
+            }
+            return(
+                <div className={error.length>0?'item error':'item'}>
+                    <label for={id} >{label}</label>
+                    <input 
+                        type="text" 
+                        name={id} 
+                        id={id}
+                        placeholder={label} 
+                        value={data[id]}
+                        ref={reff}
+                        onChange={onTextChange} 
+                    />     
+                    <div className="eror-msg">{error}</div>  
+                </div>
+            )
+
+        }
+        
+        function RadioInput({
+            data,setData,
+            id,label, grup,
+            target, radioChange,
+        }){
+            function onRadioChange(e){
+                setData((prev) =>{
+                    return {...prev, [grup]: e.target.value}
+                })
+            }
+
+            return(
+                <>
+                <input type="radio" 
+                    name={grup} 
+                    id={id}
+                    value={label} 
+                    onClick={onRadioChange} 
+                    checked={data.service===label||data.budget===label}
+                />
+                <label for={id} className={grup}>
+                    {(grup==='service')?
+                        <div className={"icon-"+grup} style={{backgroundImage:`url('img/${id}.png')`}}></div>
+                        :
+                        <div className={data.budget===label?"ceked":"cekbok"}></div>}
+                    <div className={"nama-"+grup}>{label}</div>
+                </label>
+                </>
+            )        
+            
+        }
+
+        function SubmitBox(e){
+            function kelar(){
+                const notif =JSON.stringify(e.data);
+                alert(notif);
+            }
+            return(
+                <div className="box-content last">
+                    <div className="icon-complete">
+                        <img src="img/CompleteIcon.png" alt="Selesai" />
+                    </div>
+                    <div className="closing">
+                        <h2>Submit your quote request</h2>
+                        <p>Please review all the information you previously typed in the past steps, and if all is okay, submit your message to receive a project quote in 24 - 48 hours.</p>
+                    </div>
+                    <button className="next last" onClick={kelar}>Submit</button>
+                </div>
+            )
+            
+        }
+        
+        function BudgetBox(e){
+            return(
+                <>
+                <div className="box-title">
+                    <h2>What’s your project budget?</h2>
+                    <p>Please select the project budget range you have in mind.</p>
+                </div>
+                <div className="box-content">
+                    <RadioInput 
+                        id="b1"
+                        label="$5.000 - $10.000" 
+                        grup="budget"
+                        data={e.data}
+                        setData={e.setData}
+                    />
+                    <RadioInput 
+                        id="b2"
+                        label="$10.000 - $20.000"
+                        grup="budget"
+                        data={e.data}
+                        setData={e.setData}
+                    />
+                    <RadioInput 
+                        id="b3"
+                        label="$20.000 - $50.000" 
+                        grup="budget"
+                        data={e.data}
+                        setData={e.setData}
+                    />
+                    <RadioInput 
+                        id="b4"
+                        label="$50.000 +" 
+                        grup="budget"
+                        data={e.data}
+                        setData={e.setData}
+                    />
+                </div>
+                </>
+            )
+        }
+
+        function ServiceBox(e){
+            return(
+                <>
+                <div className="box-title">
+                    <h2>Our services</h2>
+                    <p>Please select which service you are interested in.</p>
+                </div>
+                <div className="box-content">
+                    <RadioInput 
+                        id="Development"
+                        label="Development" 
+                        grup="service"
+                        data={e.data}
+                        setData={e.setData}
+                    />
+                    <RadioInput 
+                        id="WebDesign"
+                        label="Web Design" 
+                        grup="service"
+                        data={e.data}
+                        setData={e.setData}
+                    />
+                    <RadioInput 
+                        id="Marketing"
+                        label="Marketing" 
+                        grup="service"
+                        data={e.data}
+                        setData={e.setData}
+                    />
+                    <RadioInput 
+                        id="Other"
+                        label="Other" 
+                        grup="service"
+                        data={e.data}
+                        setData={e.setData}
+                    />
+                </div>
+                </>
+            )
+        }
+
+        function ContactBox(e){
+            return(
+                <>
+                <div className="box-title">
+                    <h2>Contact details</h2>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisc.</p>
+                </div>
+                <div className="box-content">
+                    <TextInput 
+                        id="name"
+                        label="Name"
+                        data={e.data}
+                        setData={e.setData}
+                        error={e.error.name}
+                        reff={e.rep.name}
+                        />
+                    <TextInput 
+                        id="email"
+                        label="Email"
+                        data={e.data}
+                        setData={e.setData}
+                        error={e.error.email}
+                        reff={e.rep.email}
+                        />
+                    <TextInput 
+                        id="phone"
+                        label="Phone Number"
+                        data={e.data}
+                        setData={e.setData}
+                        error={e.error.phone}
+                        reff={e.rep.phone}
+                        />
+                    <TextInput 
+                        id="company"
+                        label="Company"
+                        data={e.data}
+                        setData={e.setData}
+                        error={e.error.company}
+                        reff={e.rep.company}
+                    />
+                </div>
+                </>
+            )
+        }
+
+        function Container(e){
+            return(
+                <>
+                <header>
+                    <h1>Get a project quote</h1>
+                    <p>Please fill the form below to receive a quote for your project. Feel free to add as much detail as needed.</p>
+                </header>
+                <div class="box">
+                   {e.children}
+                </div>
+                <div class="pagenav">
+                    <button class={e.page===1?"hide":"prev"} onClick={e.onPrev} >Previous step</button>
+                    <button class={e.page>=4?"hide":"next"} onClick={e.onNext}>Next step</button>
+                </div>
+                </>
+            )
+        }
+
         function App(){
             const [page, setPage] = React.useState(1);
             const [data, setData] =React.useState({
@@ -21,26 +279,25 @@
                 service:'Development',
                 budget:'$50.000 +'
             });
-            const [temp, setTemp] =React.useState({
-                name:data.name,
-                email:data.email,
-                phone:data.phone,
-                company:data.company,
-                service:data.service,
-                budget:data.budget
-            });
+
             const [error, setError] =React.useState({
                 name:"",
                 email:"",
                 phone:"",
                 company:"",
             });
-            
+
             const nameRef = React.useRef(null);
             const emailRef = React.useRef(null);
             const phoneRef = React.useRef(null);
             const companyRef = React.useRef(null);
-            
+            const ref = {
+                name:nameRef,
+                email:emailRef,
+                phone:phoneRef,
+                company:companyRef
+                }
+                
             React.useEffect(() => {
                 if(error.name.length>0){nameRef.current.focus()} else
                 if(error.email.length>0){emailRef.current.focus()} else
@@ -49,18 +306,17 @@
             }, [error]);
 
 
-
-
             function emailCheck(e) {
                 const pattern = /[A-Za-z0-9\.]{6,30}\@gmail\.com$/
                 return pattern.test(e);
             };
-            
+
             function phoneCheck(e){
                 const pattern = /08[0-9]{6,10}$/ 
                 return pattern.test(e);
             };
-            
+        
+
             function isValidContact(e){
                 const te = {};
                 if(e.name==''){te.name='Name is required'} else {te.name=''};
@@ -71,362 +327,31 @@
                 return te;
             }
 
-            function saveData(){
-                setError(isValidContact(temp));
-                if(isValidContact(temp).status==false){Object.assign(data,temp)}
-            }
-
             function nextButton(){
-                saveData();
-                if(page>1||isValidContact(temp).status==false){setPage(page+1)};
+                if(page===1){setError(isValidContact(data))};
+                if(page>1||isValidContact(data).status==false){setPage(page+1)};
             }
 
             function prevButton(){
-                saveData();
-                if(page>1||isValidContact(temp).status==false){setPage(page-1)};
+                setPage(page-1);
             }
 
-            function Header(){
-                return (
-                    <header>
-                        <h1>Get a project quote</h1>
-                        <p>Please fill the form below to receive a quote for your project. Feel free to add as much detail as needed.</p>
-                    </header>
-                )
-                
-            }
-            
-            function Step(p){
-                const [s,d] = ["step","step done"];
-                return(
-                    <div className={p.d?d:s}>{p.s}</div>
-                )
-            }
-            
-            function Bar(p){
-                switch(p.k){
-                    case '1':
-                        return(<div className="bar"><div className="half"></div></div>);
-                        break;
-                    case '2':
-                        return(<div class="bar done"></div>);
-                        break;
-                    default:
-                        return(<div class="bar"></div>);
-                    
-                }
-            }
-
-            function Navbar(x){
-                const p=x.page;
-                return(
-                    <nav>
-                        <Step s="1" d />
-                        <Bar k={p==1?'1':'2'}/>
-                        <Step s="2" d={p<2?'':'1'} />
-                        <Bar k={p<2?'':p==2?'1':'2'}/>
-                        <Step s="3" d={p<3?'':'1'} />
-                        <Bar k={p<3?'':p==3?'1':'2'}/>
-                        <Step s="4" d={p<4?'':'1'} />
-                    </nav>
-                )
-            }
-
-            function BoxTitle(x){
-                switch(x.page) {
-                    case 1:
-                        return(
-                            <div className="box-title">
-                                <h2>Contact details</h2>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisc.</p>
-                            </div>
-                        )
-                        break;
-                    case 2:
-                        return(
-                            <div className="box-title">
-                                <h2>Our services</h2>
-                                <p>Please select which service you are interested in.</p>
-                            </div>
-                        )
-                        // code block
-                        break;
-                    case 3:
-                        return(
-                            <div className="box-title">
-                                <h2>What’s your project budget?</h2>
-                                <p>Please select the project budget range you have in mind.</p>
-                            </div>
-                        )
-                        // code block
-                        break;
-                    case 4:
-                        return null
-                        break;
-                    } 
-            }
-
-            function PageSubmit(){
-                const notif =JSON.stringify(data);
-                function kelar(e){
-                    alert(notif);
-                }
-                return(
-                    <div className="box-content last">
-                        <div className="icon-complete">
-                            <img src="img/CompleteIcon.png" alt="Selesai" />
-                        </div>
-                        <div className="closing">
-                            <h2>Submit your quote request</h2>
-                            <p>Please review all the information you previously typed in the past steps, and if all is okay, submit your message to receive a project quote in 24 - 48 hours.</p>
-                        </div>
-                        <button className="next last" onClick={kelar}>Submit</button>
-                    </div>
-                )
-                
-            }
-
-            function PageBudget(){
-                function radioChange(e){
-                    setTemp((prev) =>{
-                        return {...prev, budget: e.target.value}
-                    })
-                }
-                return(
-                    <div className="box-content">
-                        <input 
-                            type="radio" 
-                            name="budget" 
-                            id="b1" 
-                            value="$5.000 - $10.000"
-                            checked={temp.budget=="$5.000 - $10.000"?true:false} 
-                            onClick={radioChange} 
-                        />
-                        <label for="b1" class="grup-harga">
-                            <div class={temp.budget=="$5.000 - $10.000"?"ceked":"cekbok"}></div>
-                            <div class="harga">$5.000 - $10.000</div>    
-                        </label>
-                        <input 
-                            type="radio" 
-                            name="budget" 
-                            id="b2" 
-                            value="$10.000 - $20.000" 
-                            checked={temp.budget=="$10.000 - $20.000"?true:false} 
-                            onClick={radioChange} 
-                        />
-                        <label for="b2" class="grup-harga">
-                            <div class={temp.budget=="$10.000 - $20.000"?"ceked":"cekbok"}></div>
-                            <div class="harga">$10.000 - $20.000</div>    
-                        </label>
-                        <input 
-                            type="radio" 
-                            name="budget" 
-                            id="b3" 
-                            value="$20.000 - $50.000" 
-                            checked={temp.budget=="$20.000 - $50.000"?true:false} 
-                            onClick={radioChange} 
-                        />
-                        <label for="b3" class="grup-harga">
-                            <div class={temp.budget=="$20.000 - $50.000"?"ceked":"cekbok"}></div>
-                            <div class="harga">$20.000 - $50.000</div>    
-                        </label>
-                        <input 
-                            type="radio" 
-                            name="budget" 
-                            id="b4" 
-                            value="$50.000 +" 
-                            checked={temp.budget=="$50.000 +"?true:false} 
-                            onClick={radioChange} 
-                        />
-                        <label for="b4" class="grup-harga">
-                            <div class={temp.budget=="$50.000 +"?"ceked":"cekbok"}></div>
-                            <div class="harga">$50.000 +</div>    
-                        </label>
-                    </div>
-                )
-            }
-
-            function PageLayanan(){
-                function radioChange(e){
-                    setTemp((prev) =>{
-                        return {...prev, service: e.target.value}
-                    })
-                }
-                return(
-                    <div className="box-content">
-                        <input type="radio" 
-                            name="service" 
-                            id="Development" 
-                            value="Development" 
-                            onClick={radioChange} 
-                            checked={temp.service=="Development"?true:false}
-                        />
-                        <label for="Development" className="layanan">
-                            <div className="icon-layanan" style={{backgroundImage:`url('img/Development.png')`}}></div>
-                            <div className="nama-layanan">Development</div>
-                        </label>
-                        <input 
-                            type="radio" 
-                            name="service" 
-                            id="Web Design" 
-                            value="Web Design" 
-                            onClick={radioChange} 
-                            checked={temp.service=="Web Design"?true:false} 
-                        />
-                        <label for="Web Design" className="layanan">
-                            <div className="icon-layanan" style={{backgroundImage:`url('img/WebDesign.png')`}}></div>
-                            <div className="nama-layanan">Web Design</div>
-                        </label>
-                        <input 
-                            type="radio" 
-                            name="service" 
-                            id="Marketing" 
-                            value="Marketing" 
-                            onClick={radioChange} 
-                            checked={temp.service=="Marketing"?true:false} 
-                        />
-                        <label for="Marketing" className="layanan">
-                            <div className="icon-layanan" style={{backgroundImage:`url('img/Marketing.png')`}}></div>
-                            <div className="nama-layanan">Marketing</div>
-                        </label>
-                        <input 
-                            type="radio" 
-                            name="service" 
-                            id="Other" 
-                            value="Other" 
-                            onClick={radioChange} 
-                            checked={temp.service=="Other"?true:false} 
-                        />
-                        <label for="Other" className="layanan">
-                            <div className="icon-layanan" style={{backgroundImage:`url('img/Other.png')`}}></div>
-                            <div className="nama-layanan">Other</div>
-                        </label>
-                    </div>
-                )
-            }
-
-            function PageContacts(x){
-                const [contact, setContact] =React.useState({
-                    name: temp.name,
-                    email: temp.email,
-                    phone: temp.phone,
-                    company: temp.company
-                });                 
-                
-                function handleChange(e){
-                    const name = e.target.name;
-                    const value = e.target.value;
-                    setContact((prev) =>{
-                        return {...prev, [name]: value}
-                    })
-                }
-
-                function syncContact(){
-                    Object.assign(temp,contact);
-                }
-                
-                function eventChange(e){
-                    const name = e.target.name;
-                    const value = e.target.value;
-                    setContact((prev) =>{
-                        return {...prev, [name]: value}
-                    })
-                }
-                
-                return(
-                    <div className="box-content">
-                        <div className={error.name?'item error':'item'}>
-                            <label for="name" >Name</label>
-                            <input 
-                                type="text" 
-                                name="name" 
-                                id="name"  
-                                placeholder="Name" 
-                                value={contact.name}
-                                ref={nameRef}
-                                onChange={eventChange} 
-                                onBlur={syncContact}
-                            />     
-                            <div className="eror-msg">{error.name}</div>  
-                        </div>
-                        <div className={error.email?'item error':'item'}>
-                            <label for="email">Email</label>
-                            <input 
-                                type="text" 
-                                name="email" 
-                                id="email" 
-                                placeholder="Email" 
-                                value={contact.email} 
-                                ref={emailRef}
-                                onChange={eventChange} 
-                                onBlur={syncContact} 
-                            />     
-                            <div className="eror-msg">{error.email}</div>     
-                        </div>
-                        <div className={error.phone?'item error':'item'}>
-                            <label for="phone">Phone Number</label>
-                            <input 
-                                type="text" 
-                                name="phone" 
-                                id="phone" 
-                                placeholder="Phone Number" 
-                                value={contact.phone} 
-                                ref={phoneRef}
-                                onChange={eventChange} 
-                                onBlur={syncContact} 
-                            />     
-                            <div className="eror-msg">{error.phone}</div>     
-                        </div>
-                        <div className={error.company?'item error':'item'}>
-                            <label for="company">Company</label>
-                            <input 
-                                type="text" 
-                                name="company" 
-                                id="company" 
-                                placeholder="Company" 
-                                value={contact.company} 
-                                ref={companyRef}
-                                onChange={eventChange} 
-                                onBlur={syncContact} 
-                            />
-                            <div className="eror-msg">{error.company}</div>     
-                        </div>
-                    </div>
-                )
-            }
-
-            function BoxContent(x){
-                if(x.page==1){return( <PageContacts />)}
-                else if(x.page==2){return( <PageLayanan />)}
-                else if(x.page==3){return <PageBudget />}
-                else {return <PageSubmit />}
-                
-            }
-
-            function Box(x){
-                return(
-                    <div className="box">
-                        <Navbar page={x.page} />
-                        <BoxTitle page={x.page} />
-                        <BoxContent page={x.page} />
-                    </div>
-                )
-            }
-
-            function PageNav(p){
-                return(
-                    <div className="pagenav">
-                        <button class={p.page>1?'prev':'prev hide'} onClick={prevButton}>Previous step</button>
-                        <button class={p.page<4?'next':'next hide'} onClick={nextButton}>Next step</button>
-                    </div>
-                )
-            }
             return (
-                < >
-                    <Header />
-                    <Box page={page}/>
-                    <PageNav page={page} />
-                </>    
+                <Container 
+                    page={page}
+                    onNext={nextButton}
+                    onPrev={prevButton}
+                >
+                    <StepBox page={page} />
+                    <ContentBox                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+                        page={page}
+                        data={data}
+                        setData={setData}
+                        error={error}
+                        setError={setError}
+                        rep={ref}
+                    />
+                </Container>
             )
         };
 
